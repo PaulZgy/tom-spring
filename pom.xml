@@ -13,6 +13,7 @@
         <module>spring-step-03</module>
         <module>spring-step-04</module>
         <module>spring-step-05</module>
+        <module>spring-step-01</module>
     </modules>
 
     <dependencies>
