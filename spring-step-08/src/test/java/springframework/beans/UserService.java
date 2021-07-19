@@ -1,10 +1,14 @@
 package springframework.beans;
 
 import cn.zgy.springframework.beans.BeansException;
-import cn.zgy.springframework.beans.factory.DisposableBean;
-import cn.zgy.springframework.beans.factory.InitializingBean;
+import cn.zgy.springframework.beans.factory.*;
+import cn.zgy.springframework.context.ApplicationContext;
+import cn.zgy.springframework.context.ApplicationContextAware;
 
-public class UserService implements InitializingBean, DisposableBean {
+public class UserService implements BeanNameAware, BeanClassLoaderAware, ApplicationContextAware, BeanFactoryAware {
+
+    private ApplicationContext applicationContext;
+    private BeanFactory beanFactory;
 
     private String uId;
 
@@ -19,13 +23,23 @@ public class UserService implements InitializingBean, DisposableBean {
     }
 
     @Override
-    public void destroy() throws BeansException {
-        System.out.println("执行：UserService.destroy");
+    public void setBeanClassLoader(ClassLoader classLoader) throws BeansException {
+        System.out.println("ClassLoader: " + classLoader);
     }
 
     @Override
-    public void afterPropertiesSet() throws BeansException {
-        System.out.println("执行：UserService.afterPropertiesSet");
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        this.beanFactory = beanFactory;
+    }
+
+    @Override
+    public void setBeanName(String name) {
+        System.out.println("beanName is " + name);
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 
     public String getuId() {
@@ -60,4 +74,11 @@ public class UserService implements InitializingBean, DisposableBean {
         this.userDao = userDao;
     }
 
+    public ApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
+
+    public BeanFactory getBeanFactory() {
+        return beanFactory;
+    }
 }
