@@ -12,6 +12,7 @@
         <module name="spring-step-03" />
         <module name="spring-step-02" />
         <module name="spring-step-01" />
+        <module name="spring-step-08" />
         <module name="spring-step-07" />
       </profile>
     </annotationProcessing>
@@ -24,6 +25,7 @@
       <module name="spring-step-05" target="8" />
       <module name="spring-step-06" target="8" />
       <module name="spring-step-07" target="8" />
+      <module name="spring-step-08" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -16,6 +16,7 @@
         <module>spring-step-01</module>
         <module>spring-step-06</module>
         <module>spring-step-07</module>
+        <module>spring-step-08</module>
     </modules>
 
     <dependencies>
