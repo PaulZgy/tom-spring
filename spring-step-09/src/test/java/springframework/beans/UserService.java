@@ -5,14 +5,14 @@ import cn.zgy.springframework.beans.factory.*;
 import cn.zgy.springframework.context.ApplicationContext;
 import cn.zgy.springframework.context.ApplicationContextAware;
 
-public class UserService implements BeanNameAware, BeanClassLoaderAware, ApplicationContextAware, BeanFactoryAware {
+public class UserService {
 
     private ApplicationContext applicationContext;
     private BeanFactory beanFactory;
 
     private String uId;
 
-    private UserDao userDao;
+    private IUserDao userDao;
 
     private String location;
 
@@ -20,26 +20,6 @@ public class UserService implements BeanNameAware, BeanClassLoaderAware, Applica
 
     public String queryUserInfo() {
         return userDao.queryUserName(uId) + "," + company + "," + location;
-    }
-
-    @Override
-    public void setBeanClassLoader(ClassLoader classLoader) throws BeansException {
-        System.out.println("ClassLoader: " + classLoader);
-    }
-
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        this.beanFactory = beanFactory;
-    }
-
-    @Override
-    public void setBeanName(String name) {
-        System.out.println("beanName is " + name);
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
     }
 
     public String getuId() {
@@ -66,11 +46,11 @@ public class UserService implements BeanNameAware, BeanClassLoaderAware, Applica
         this.uId = uId;
     }
 
-    public UserDao getUserDao() {
+    public IUserDao getUserDao() {
         return userDao;
     }
 
-    public void setUserDao(UserDao userDao) {
+    public void setUserDao(IUserDao userDao) {
         this.userDao = userDao;
     }
 
