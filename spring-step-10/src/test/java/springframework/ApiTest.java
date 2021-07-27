@@ -19,12 +19,21 @@ import springframework.beans.UserDao;
 import springframework.beans.UserService;
 import springframework.common.MyBeanFactoryPostProcessor;
 import springframework.common.MyBeanPostProcessor;
+import springframework.event.CustomEvent;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 public class ApiTest {
     private DefaultResourceLoader resourceLoader;
+
+    @Test
+    public void test_event() {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        context.publishEvent(new CustomEvent(context, 5141086763L, "成功了!"));
+
+        context.registerShutdownHook();
+    }
 
     @Test
     public void test_factory_bean() {
