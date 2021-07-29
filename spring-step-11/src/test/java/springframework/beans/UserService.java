@@ -5,60 +5,28 @@ import cn.zgy.springframework.beans.factory.*;
 import cn.zgy.springframework.context.ApplicationContext;
 import cn.zgy.springframework.context.ApplicationContextAware;
 
-public class UserService {
+import java.util.Random;
 
-    private ApplicationContext applicationContext;
-    private BeanFactory beanFactory;
+public class UserService implements IUserService{
 
-    private String uId;
 
-    private IUserDao userDao;
-
-    private String location;
-
-    private String company;
-
+    @Override
     public String queryUserInfo() {
-        return userDao.queryUserName(uId) + "," + company + "," + location;
+        try {
+            Thread.sleep(new Random(1).nextInt(100));
+        }catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "tom 10001 杭州";
     }
 
-    public String getuId() {
-        return uId;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getCompany() {
-        return company;
-    }
-
-    public void setCompany(String company) {
-        this.company = company;
-    }
-
-    public void setuId(String uId) {
-        this.uId = uId;
-    }
-
-    public IUserDao getUserDao() {
-        return userDao;
-    }
-
-    public void setUserDao(IUserDao userDao) {
-        this.userDao = userDao;
-    }
-
-    public ApplicationContext getApplicationContext() {
-        return applicationContext;
-    }
-
-    public BeanFactory getBeanFactory() {
-        return beanFactory;
+    @Override
+    public String register(String userName) {
+        try {
+            Thread.sleep(new Random(1).nextInt(100));
+        }catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return "注册用户：" + userName + " success!";
     }
 }

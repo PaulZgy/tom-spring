@@ -1,67 +1,52 @@
 package springframework;
 
-
-import cn.hutool.core.io.IoUtil;
-import cn.zgy.springframework.beans.PropertyValue;
-import cn.zgy.springframework.beans.PropertyValues;
-import cn.zgy.springframework.beans.factory.config.BeanDefinition;
-import cn.zgy.springframework.beans.factory.config.BeanPostProcessor;
-import cn.zgy.springframework.beans.factory.config.BeanReference;
-import cn.zgy.springframework.beans.factory.support.DefaultListableBeanFactory;
-import cn.zgy.springframework.beans.factory.xml.XmlBeanDefinitionReader;
-import cn.zgy.springframework.context.support.ClassPathXmlApplicationContext;
+import cn.zgy.springframework.aop.AdvisedSupport;
+import cn.zgy.springframework.aop.TargetSource;
+import cn.zgy.springframework.aop.aspectj.AspectJExpressionPointcut;
+import cn.zgy.springframework.aop.framework.Cglib2AopProxy;
+import cn.zgy.springframework.aop.framework.JdkDynamicAopProxy;
 import cn.zgy.springframework.core.io.DefaultResourceLoader;
-import cn.zgy.springframework.core.io.Resource;
-import org.apache.commons.collections.bag.SynchronizedSortedBag;
-import org.junit.Before;
 import org.junit.Test;
-import springframework.beans.UserDao;
-import springframework.beans.UserService;
-import springframework.common.MyBeanFactoryPostProcessor;
-import springframework.common.MyBeanPostProcessor;
-import springframework.event.CustomEvent;
 
-import java.io.IOException;
-import java.io.InputStream;
+import springframework.beans.IUserService;
+import springframework.beans.UserService;
+import springframework.beans.UserServiceInterceptor;
+
+import java.lang.reflect.Method;
+
 
 public class ApiTest {
     private DefaultResourceLoader resourceLoader;
 
     @Test
-    public void test_event() {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring.xml");
-        context.publishEvent(new CustomEvent(context, 5141086763L, "成功了!"));
+    public void test_aop() throws NoSuchMethodException {
+        AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut("execution(* springframework.beans.UserService.*(..))");
+        Class<UserService> clazz = UserService.class;
+        Method method = clazz.getDeclaredMethod("queryUserInfo");
 
-        context.registerShutdownHook();
+        System.out.println(pointcut.matches(clazz));
+        System.out.println(pointcut.matches(method, clazz));
     }
 
     @Test
-    public void test_factory_bean() {
-        // 1.初始化 BeanFactory
-        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
-        applicationContext.registerShutdownHook();
+    public void test_dynamic() {
+        //目标对象
+        IUserService userService = new UserService();
 
-        // 2. 调用代理方法
-        UserService userService = applicationContext.getBean("userService", UserService.class);
-        System.out.println("测试结果：" + userService.queryUserInfo());
-    }
+        //组装代理信息
+        AdvisedSupport advisedSupport = new AdvisedSupport();
+        advisedSupport.setTargetSource(new TargetSource(userService));
+        advisedSupport.setMethodInterceptor(new UserServiceInterceptor());
+        advisedSupport.setMethodMatcher(new AspectJExpressionPointcut("execution(* springframework.beans.IUserService.*(..))"));
 
-    @Test
-    public void test_prototype() {
-        // 1.初始化 BeanFactory
-        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
-        applicationContext.registerShutdownHook();
+        //代理对象(JdkDynamicAopProxy)
+        IUserService proxy_jdk = (IUserService) new JdkDynamicAopProxy(advisedSupport).getProxy();
+        //测试调用
+        System.out.println("测试结果：" + proxy_jdk.queryUserInfo());
 
-        // 2. 获取Bean对象调用方法
-        UserService userService01 = applicationContext.getBean("userService", UserService.class);
-        UserService userService02 = applicationContext.getBean("userService", UserService.class);
-
-        // 3. 配置 scope="prototype/singleton"
-        System.out.println(userService01);
-        System.out.println(userService02);
-
-        // 4. 打印十六进制哈希
-        System.out.println(userService01 + " 十六进制哈希：" + Integer.toHexString(userService01.hashCode()));
-
+        // 代理对象(Cglib2AopProxy)
+        IUserService proxy_cglib = (IUserService) new Cglib2AopProxy(advisedSupport).getProxy();
+        // 测试调用
+        System.out.println("测试结果：" + proxy_cglib.register("彭于晏"));
     }
 }
