@@ -2,6 +2,8 @@ package springframework.beans;
 
 import cn.zgy.springframework.beans.BeansException;
 import cn.zgy.springframework.beans.factory.*;
+import cn.zgy.springframework.beans.factory.annotation.Autowired;
+import cn.zgy.springframework.beans.factory.annotation.Value;
 import cn.zgy.springframework.context.ApplicationContext;
 import cn.zgy.springframework.context.ApplicationContextAware;
 import cn.zgy.springframework.stereotype.Component;
@@ -10,8 +12,11 @@ import java.util.Random;
 
 @Component("userService")
 public class UserService implements IUserService{
-
+    @Value("${token}")
     private String token;
+
+    @Autowired
+    private UserDao userDao;
 
     @Override
     public String queryUserInfo() {
@@ -20,7 +25,7 @@ public class UserService implements IUserService{
         }catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return "tom 10001 杭州";
+        return userDao.queryUserName("10001") + ", " + token;
     }
 
     @Override
