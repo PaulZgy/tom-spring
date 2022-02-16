@@ -16,6 +16,7 @@
         <module name="spring-step-03" />
         <module name="spring-step-02" />
         <module name="spring-step-01" />
+        <module name="spring-step-15" />
         <module name="spring-step-14" />
         <module name="spring-step-13" />
         <module name="spring-step-12" />
@@ -38,6 +39,7 @@
       <module name="spring-step-12" target="8" />
       <module name="spring-step-13" target="8" />
       <module name="spring-step-14" target="8" />
+      <module name="spring-step-15" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>
