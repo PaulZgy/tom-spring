@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	         http://www.springframework.org/schema/beans/spring-beans.xsd
+		 http://www.springframework.org/schema/context">
+    <bean id="husband" class="springframework.beans.Husband">
+        <property name="wifiName" value="{我也不知道}"/>
+        <property name="marriageDate" value="2022-02-20"/>
+    </bean>
+
+    <bean id="conversionService" class="cn.zgy.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters" ref="converters"/>
+    </bean>
+
+    <bean id="converters" class="springframework.beans.ConvertersFactoryBean"></bean>
+</beans>
